@@ -1,6 +1,5 @@
 package com.example.musicrequestapp.domain.post.service;
 
-import com.example.musicrequestapp.domain.music.entity.SelectEnum;
 import com.example.musicrequestapp.domain.post.entity.Post;
 import com.example.musicrequestapp.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ public class PostCleanUp {
     private final PostRepository postRepository;
 
     @Transactional
-    @Scheduled(cron = "0 0 5 L * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 5 L */2 ?", zone = "Asia/Seoul")
     public void run() {
         List<Post> list = postRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
