@@ -51,6 +51,7 @@ public class SelectMusic {
         if (Boolean.TRUE.equals(request.getIsSuccess())) {
             Music music = Music.builder()
                     .url(post.getContent())
+                    .user(post.getTitle())
                     .build();
 
             musicRepository.save(music);
