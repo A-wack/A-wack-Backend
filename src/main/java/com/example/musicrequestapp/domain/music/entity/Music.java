@@ -14,4 +14,6 @@ public class Music {
     @Id
     private String url;
 
+    private String user;
+
 }

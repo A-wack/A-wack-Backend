@@ -58,7 +58,7 @@ public class DailyMusic {
 
     private DailyMusicResponse createEmptyResponse() {
         return DailyMusicResponse.builder()
-                .music("기상송이 없습니다.")
+                .music("현재 기상송이 없습니다.")
                 .build();
     }
 
