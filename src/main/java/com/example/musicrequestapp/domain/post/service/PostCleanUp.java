@@ -20,8 +20,7 @@ public class PostCleanUp {
     @Transactional
     @Scheduled(cron = "0 0 5 L * ?", zone = "Asia/Seoul")
     public void run() {
-        List<Post> list = postRepository.findAllByIsSuccess(SelectEnum.NOT_SELECTED.getNum());
-        list.addAll(postRepository.findAllByIsSuccess(SelectEnum.CHECKING.getNum()));
+        List<Post> list = postRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
 
         for (Post post : list) {
