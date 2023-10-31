@@ -24,6 +24,7 @@ public enum ErrorCode {
     //404
     USER_NOT_FOUND(404, "유저를 찾지 못하였습니다."),
     POST_NOT_FOUND(404, "신청 내역을 찾지 못하였습니다."),
+    MUSIC_NOT_FOUND(404, "입력하신 URL에 해당하는 기상송을 찾지 못하였습니다."),
 
     //409
     ALREADY_USER_EXIST(409, "유저가 이미 존재합니다."),
