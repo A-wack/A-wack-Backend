@@ -34,6 +34,7 @@ public class AuthController {
     }
 
     @PatchMapping("/refresh")
+    @ResponseStatus(HttpStatus.OK)
     public TokenResponse tokenRefresh(@RequestBody ReissueRequest request) {
         return reissueToken.execute(request);
     }
