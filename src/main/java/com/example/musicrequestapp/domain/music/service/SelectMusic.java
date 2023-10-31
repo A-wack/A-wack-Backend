@@ -22,8 +22,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 //어드민 권한
 public class SelectMusic {
-    private final UserFacade userFacade;
     private final MusicRepository musicRepository;
+    private final UserFacade userFacade;
     private final PostFacade postFacade;
 
     private static final String SELECTED = SelectEnum.SELECTED.getNum();
