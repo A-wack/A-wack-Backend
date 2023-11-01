@@ -17,7 +17,7 @@ public class PostCleanUp {
     private final PostRepository postRepository;
 
     @Transactional
-    @Scheduled(cron = "0 0 5 L */2 ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 5 L * ?", zone = "Asia/Seoul")
     public void run() {
         List<Post> list = postRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
