@@ -8,6 +8,8 @@ import com.example.musicrequestapp.domain.auth.controller.dto.response.TokenResp
 import com.example.musicrequestapp.domain.auth.service.ReissueToken;
 import com.example.musicrequestapp.domain.auth.service.SignIn;
 import com.example.musicrequestapp.domain.auth.service.SignUp;
+import com.example.musicrequestapp.global.error.exception.TooManyRequestException;
+import io.github.bucket4j.Bucket;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class AuthController {
     private final SignIn signIn;
     private final SignUp signUp;
     private final ReissueToken reissueToken;
+    private final Bucket bucket;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,7 +33,11 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public SignInResponse setSignIn(@Valid @RequestBody SignInRequest request) {
-        return signIn.execute(request);
+        if (bucket.tryConsume(1)) {
+            return signIn.execute(request);
+        } else {
+            throw TooManyRequestException.EXCEPTION;
+        }
     }
 
     @PatchMapping("/refresh")
