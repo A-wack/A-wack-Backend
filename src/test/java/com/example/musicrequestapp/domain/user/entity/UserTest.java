@@ -34,6 +34,7 @@ class UserTest {
         //t
         User savedUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException());
+
         Assertions.assertNotNull(savedUser); // not null
         Assertions.assertEquals(name, savedUser.getName()); // 이름
         Assertions.assertEquals(email, savedUser.getEmail()); // 이메일
