@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUser_IdOrderByUpload(Long id);
-
-    List<Post> findAllByIsSuccess(String message);
 }
