@@ -1,7 +1,7 @@
 package com.example.musicrequestapp.domain.auth.service;
 
 import com.example.musicrequestapp.domain.auth.controller.dto.request.SignInRequest;
-import com.example.musicrequestapp.domain.auth.controller.dto.response.SignInResponse;
+import com.example.musicrequestapp.domain.auth.controller.dto.response.TokenResponse;
 import com.example.musicrequestapp.domain.auth.exception.AccessWithoutEmailAuthenticationException;
 import com.example.musicrequestapp.domain.auth.exception.PasswordNotMatchException;
 import com.example.musicrequestapp.domain.user.entity.Role;
@@ -22,11 +22,11 @@ public class SignIn {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public SignInResponse execute(SignInRequest request) {
+    public TokenResponse execute(SignInRequest request) {
 
-        User user = userFacade.getUserByEmail(request.getEmail());
+        User user = userFacade.getUserByEmail(request.email());
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw PasswordNotMatchException.EXCEPTION;
         }
 
@@ -41,7 +41,7 @@ public class SignIn {
         String accessToken = jwtProvider.generateAccessToken(user.getEmail());
         String refreshToken = jwtProvider.generateRefreshToken(user.getEmail());
 
-        return SignInResponse.builder()
+        return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

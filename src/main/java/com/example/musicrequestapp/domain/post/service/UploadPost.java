@@ -6,7 +6,6 @@ import com.example.musicrequestapp.domain.post.repository.PostRepository;
 import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +23,8 @@ public class UploadPost {
 
         Post post = Post.builder()
                 .title(user.getName())
-                .content(request.getContent())
-                .url(request.getUrl())
+                .content(request.content())
+                .url(request.url())
                 .user(user)
                 .upload(LocalDateTime.now())
                 .build();

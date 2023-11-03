@@ -67,7 +67,7 @@ public class EmailService {
 
     @Async
     public void sendAuthCode(EmailRequest request) throws MessagingException, UnsupportedEncodingException {
-        String email = request.getEmail();
+        String email = request.email();
         User user = userFacade.getUserByEmail(email);
 
         if (user.getRole() == Role.ROLE_STUDENT) {
@@ -99,7 +99,7 @@ public class EmailService {
 
     @Transactional
     public EmailVerifyResponse verifyEmail(String authCode, EmailRequest request) {
-        String email = request.getEmail();
+        String email = request.email();
         if (isVerify(authCode, email)) {
             authCodeDao.deleteAuthCode(email);
             User user = userFacade.getUserByEmail(email);

@@ -5,14 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-@AllArgsConstructor
-public class DailyMusicResponse {
-    private String music;
-
+public record DailyMusicResponse(String music) {
     public DailyMusicResponse(Music music) {
-        this.music = music.getUrl();
+        this(music.getUrl());
     }
 
 }

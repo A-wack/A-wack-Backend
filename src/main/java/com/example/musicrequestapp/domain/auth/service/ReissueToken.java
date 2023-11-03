@@ -19,7 +19,7 @@ public class ReissueToken {
     private Long refreshExp;
 
     public TokenResponse execute(ReissueRequest request) {
-        String token = request.getRefreshToken();
+        String token = request.refreshToken();
 
         return refreshTokenRepository.findById(token)
                 .map(refreshToken -> {

@@ -41,14 +41,14 @@ public class SelectMusic {
             throw UnableToAddMusicException.EXCEPTION;
         }
 
-        Post post = postFacade.getPostById(request.getPostId());
+        Post post = postFacade.getPostById(request.postId());
 
         if (Objects.equals(post.getIsSuccess(), SELECTED) ||
             Objects.equals(post.getIsSuccess(), DENIED)) {
             throw AlreadyUsedPostException.EXCEPTION;
         }
 
-        if (Boolean.TRUE.equals(request.getIsSuccess())) {
+        if (Boolean.TRUE.equals(request.isSuccess())) {
             Music music = Music.builder()
                     .url(post.getContent())
                     .user(post.getTitle())

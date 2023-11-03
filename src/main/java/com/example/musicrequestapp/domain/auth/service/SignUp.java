@@ -21,19 +21,19 @@ public class SignUp {
     @Transactional
     public void execute(SignUpRequest request) {
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             throw AlreadyEmailExistException.EXCEPTION;
         }
 
-        if (userRepository.findByName(request.getName()).isPresent()) {
+        if (userRepository.findByName(request.name()).isPresent()) {
             throw AlreadyNameExistException.EXCEPTION;
         }
 
-        String password = passwordEncoder.encode(request.getPassword());
+        String password = passwordEncoder.encode(request.password());
 
         User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
+                .name(request.name())
+                .email(request.email())
                 .password(password)
                 .build();
 

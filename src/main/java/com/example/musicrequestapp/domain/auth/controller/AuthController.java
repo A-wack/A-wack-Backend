@@ -3,7 +3,6 @@ package com.example.musicrequestapp.domain.auth.controller;
 import com.example.musicrequestapp.domain.auth.controller.dto.request.ReissueRequest;
 import com.example.musicrequestapp.domain.auth.controller.dto.request.SignInRequest;
 import com.example.musicrequestapp.domain.auth.controller.dto.request.SignUpRequest;
-import com.example.musicrequestapp.domain.auth.controller.dto.response.SignInResponse;
 import com.example.musicrequestapp.domain.auth.controller.dto.response.TokenResponse;
 import com.example.musicrequestapp.domain.auth.service.ReissueToken;
 import com.example.musicrequestapp.domain.auth.service.SignIn;
@@ -32,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public SignInResponse setSignIn(@Valid @RequestBody SignInRequest request) {
+    public TokenResponse setSignIn(@Valid @RequestBody SignInRequest request) {
         if (bucket.tryConsume(1)) {
             return signIn.execute(request);
         } else {
