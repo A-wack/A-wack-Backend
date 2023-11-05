@@ -19,11 +19,7 @@ public class DeleteMusic {
 
     @Transactional
     public void execute(String url) {
-        User user = userFacade.getUser();
-
-        if (user.getRole() == Role.ROLE_ADMIN) {
-            throw NoPermissionException.EXCEPTION;
-        }
+        userFacade.validateAdminUser();
 
         Music music = musicRepository.findByUrl(url)
                 .orElseThrow(() -> MusicNotFoundException.EXCEPTION);

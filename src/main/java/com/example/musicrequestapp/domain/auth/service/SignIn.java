@@ -23,13 +23,23 @@ public class SignIn {
 
     @Transactional
     public TokenResponse execute(SignInRequest request) {
+        User user = authenticateUser(request);
+        validateUserPermission(user);
 
+        return generateToken(user);
+    }
+
+    private User authenticateUser(SignInRequest request) {
         User user = userFacade.getUserByEmail(request.email());
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw PasswordNotMatchException.EXCEPTION;
         }
 
+        return user;
+    }
+
+    private void validateUserPermission(User user) {
         if (user.getRole() == null) {
             throw NoPermissionException.EXCEPTION;
         }
@@ -38,6 +48,9 @@ public class SignIn {
             throw AccessWithoutEmailAuthenticationException.EXCEPTION;
         }
 
+    }
+
+    private TokenResponse generateToken(User user) {
         String accessToken = jwtProvider.generateAccessToken(user.getEmail());
         String refreshToken = jwtProvider.generateRefreshToken(user.getEmail());
 
@@ -45,7 +58,5 @@ public class SignIn {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-
     }
-
 }

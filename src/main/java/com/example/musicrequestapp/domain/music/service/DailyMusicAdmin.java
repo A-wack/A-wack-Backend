@@ -21,11 +21,7 @@ public class DailyMusicAdmin {
 
     @Transactional(readOnly = true)
     public List<DailyMusicAdminResponse> execute() {
-        User user = userFacade.getUser();
-
-        if (user.getRole() == Role.ROLE_ADMIN) {
-            throw NoPermissionException.EXCEPTION;
-        }
+        userFacade.validateAdminUser();
 
         List<Music> musicList = musicRepository.findAll();
 

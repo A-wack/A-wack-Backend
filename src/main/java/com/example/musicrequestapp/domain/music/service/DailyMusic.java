@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,34 +23,21 @@ public class DailyMusic {
 
     @Transactional(readOnly = true)
     public List<DailyMusicResponse> execute() {
-
-        User user = userFacade.getUser();
-
-        if (user.getRole() == Role.ROLE_GUEST) {
-            throw NoPermissionException.EXCEPTION;
-        }
-
-        long cnt = musicRepository.count();
-
-        if (cnt == 0) {
-            DailyMusicResponse emptyResponse = createEmptyResponse();
-            return Collections.nCopies(2, emptyResponse);
-        }
+        userFacade.validateAdminUser();
 
         List<Music> list = musicRepository.findAll();
+        long cnt = list.size();
 
-        if (cnt == 1) {
+        if (cnt <= 1) {
+            List<DailyMusicResponse> responses = list.stream()
+                    .map(DailyMusicResponse::new)
+                    .collect(Collectors.toList());
+
             DailyMusicResponse emptyResponse = createEmptyResponse();
+            responses.addAll(Collections.nCopies((int) (2 - cnt), emptyResponse));
 
-            List<DailyMusicResponse> dailyMusicResponses = new java.util.ArrayList<>(
-                    list.stream()
-                            .map(DailyMusicResponse::new)
-                            .toList());
-
-            dailyMusicResponses.add(emptyResponse);
-            return dailyMusicResponses;
+            return responses;
         }
-
 
         return list.stream()
                 .map(DailyMusicResponse::new)

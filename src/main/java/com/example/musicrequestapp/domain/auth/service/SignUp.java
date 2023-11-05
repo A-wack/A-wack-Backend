@@ -20,7 +20,20 @@ public class SignUp {
 
     @Transactional
     public void execute(SignUpRequest request) {
+        validateRequest(request);
 
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        User user = User.builder()
+                .name(request.name())
+                .email(request.email())
+                .password(encodedPassword)
+                .build();
+
+        userRepository.save(user);
+    }
+
+    private void validateRequest(SignUpRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw AlreadyEmailExistException.EXCEPTION;
         }
@@ -28,16 +41,6 @@ public class SignUp {
         if (userRepository.findByName(request.name()).isPresent()) {
             throw AlreadyNameExistException.EXCEPTION;
         }
-
-        String password = passwordEncoder.encode(request.password());
-
-        User user = User.builder()
-                .name(request.name())
-                .email(request.email())
-                .password(password)
-                .build();
-
-        userRepository.save(user);
 
     }
 

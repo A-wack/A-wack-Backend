@@ -25,19 +25,15 @@ public class AllPostList {
 
     @Transactional(readOnly = true)
     public List<PostResponse> execute() {
-        User user = userFacade.getUser();
+        userFacade.validateAdminUser();
 
-        if (user.getRole() == Role.ROLE_ADMIN){
-            List<Post> list = postRepository.findAll(Sort.by(Sort.Direction.DESC, "upload"))
-                    .stream()
-                    .filter(post -> post.getIsSuccess().equals(SelectEnum.CHECKING.getNum())).toList();
+        List<Post> list = postRepository.findAll(Sort.by(Sort.Direction.DESC, "upload"))
+                .stream()
+                .filter(post -> post.getIsSuccess().equals(SelectEnum.CHECKING.getNum())).toList();
 
-            PostCollection postCollection = new PostCollection(list);
+        PostCollection postCollection = new PostCollection(list);
 
-            return postCollection.toPostResponses();
-        } else {
-            throw NoPermissionException.EXCEPTION;
-        }
+        return postCollection.toPostResponses();
     }
 
 }

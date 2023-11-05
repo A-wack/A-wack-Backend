@@ -8,6 +8,7 @@ import com.example.musicrequestapp.domain.music.exception.UnableToAddMusicExcept
 import com.example.musicrequestapp.domain.music.repository.MusicRepository;
 import com.example.musicrequestapp.domain.post.entity.Post;
 import com.example.musicrequestapp.domain.post.service.facade.PostFacade;
+import com.example.musicrequestapp.domain.sse.service.SseService;
 import com.example.musicrequestapp.domain.user.entity.Role;
 import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
@@ -25,41 +26,48 @@ public class SelectMusic {
     private final MusicRepository musicRepository;
     private final UserFacade userFacade;
     private final PostFacade postFacade;
+    private final SseService sseService;
 
     private static final String SELECTED = SelectEnum.SELECTED.getNum();
     private static final String DENIED = SelectEnum.NOT_SELECTED.getNum();
 
     @Transactional
     public void execute(SelectRequest request) {
-        User user = userFacade.getUser();
-
-        if (user.getRole() != Role.ROLE_ADMIN) {
-            throw NoPermissionException.EXCEPTION;
-        }
-
-        if (musicRepository.count() == 2) {
-            throw UnableToAddMusicException.EXCEPTION;
-        }
-
+        userFacade.validateAdminUser();
+        validateMusicCount();
         Post post = postFacade.getPostById(request.postId());
-
-        if (Objects.equals(post.getIsSuccess(), SELECTED) ||
-            Objects.equals(post.getIsSuccess(), DENIED)) {
-            throw AlreadyUsedPostException.EXCEPTION;
-        }
+        validatePostStatus(post);
 
         if (Boolean.TRUE.equals(request.isSuccess())) {
-            Music music = Music.builder()
-                    .url(post.getContent())
-                    .user(post.getTitle())
-                    .build();
-
-            musicRepository.save(music);
-            post.isSelected(SELECTED);
+            addMusicAndSendEvent(post);
         } else {
             post.isSelected(DENIED);
         }
-
     }
+
+    private void validateMusicCount() {
+        if (musicRepository.count() == 2) {
+            throw UnableToAddMusicException.EXCEPTION;
+        }
+    }
+
+    private void validatePostStatus(Post post) {
+        if (Objects.equals(post.getIsSuccess(), SELECTED) || Objects.equals(post.getIsSuccess(), DENIED)) {
+            throw AlreadyUsedPostException.EXCEPTION;
+        }
+    }
+
+    private void addMusicAndSendEvent(Post post) {
+        Music music = Music.builder()
+                .url(post.getContent())
+                .user(post.getTitle())
+                .build();
+
+        musicRepository.save(music);
+        post.isSelected(SELECTED);
+
+        sseService.sendEvent(music);
+    }
+
 
 }
