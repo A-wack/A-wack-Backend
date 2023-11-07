@@ -1,12 +1,9 @@
 package com.example.musicrequestapp.domain.user.entity;
 
-import com.example.musicrequestapp.domain.post.entity.Post;
 import com.example.musicrequestapp.global.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
