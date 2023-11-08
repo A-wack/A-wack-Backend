@@ -8,10 +8,7 @@ import com.example.musicrequestapp.domain.music.exception.UnableToAddMusicExcept
 import com.example.musicrequestapp.domain.music.repository.MusicRepository;
 import com.example.musicrequestapp.domain.post.entity.Post;
 import com.example.musicrequestapp.domain.post.service.facade.PostFacade;
-import com.example.musicrequestapp.domain.user.entity.Role;
-import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
-import com.example.musicrequestapp.global.error.exception.NoPermissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

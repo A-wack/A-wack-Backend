@@ -6,7 +6,6 @@ import com.example.musicrequestapp.domain.auth.exception.AlreadyNameExistExcepti
 import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
