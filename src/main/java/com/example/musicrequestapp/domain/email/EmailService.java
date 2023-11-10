@@ -1,12 +1,10 @@
 package com.example.musicrequestapp.domain.email;
 
-import com.example.musicrequestapp.domain.user.entity.Role;
-import com.example.musicrequestapp.domain.user.entity.User;
-import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
+import com.example.musicrequestapp.domain.email.entity.UserEmail;
+import com.example.musicrequestapp.domain.email.repository.UserEmailRepository;
 import com.example.musicrequestapp.domain.email.controller.dao.AuthCodeDao;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailRequest;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailVerifyResponse;
-import com.example.musicrequestapp.domain.email.exception.AlreadyAuthenticatedUserException;
 import com.example.musicrequestapp.domain.email.exception.MailSendException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -29,7 +27,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailService {
     private final AuthCodeDao authCodeDao;
-    private final UserFacade userFacade;
+    private final UserEmailRepository userEmailRepository;
     private final JavaMailSender mailSender;
 
     @Value("${AdminMail.id}")
@@ -68,13 +66,8 @@ public class EmailService {
     @Async("sendMail")
     public void sendAuthCode(EmailRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.email();
-        User user = userFacade.getUserByEmail(email);
 
-        if (user.getRole() == Role.ROLE_STUDENT) {
-            throw AlreadyAuthenticatedUserException.EXCEPTION;
-        }
-
-        MimeMessage message = sendEmailForAuth(user.getEmail());
+        MimeMessage message = sendEmailForAuth(email);
 
         sendSimpleMessage(message);
     }
@@ -102,8 +95,10 @@ public class EmailService {
         String email = request.email();
         if (isVerify(authCode, email)) {
             authCodeDao.deleteAuthCode(email);
-            User user = userFacade.getUserByEmail(email);
-            user.addRole(Role.ROLE_STUDENT);
+
+            userEmailRepository.save(UserEmail.builder()
+                    .email(email)
+                    .build());
             return createResponse("인증 성공", true);
         } else {
             return createResponse("인증 실패", false);
@@ -122,6 +117,5 @@ public class EmailService {
                 authCodeDao.getAuthCode(email)
                         .equals(authCode));
     }
-
 
 }
