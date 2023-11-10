@@ -1,11 +1,15 @@
 package com.example.musicrequestapp.domain.email;
 
+import com.example.musicrequestapp.domain.auth.exception.AlreadyEmailExistException;
 import com.example.musicrequestapp.domain.email.entity.UserEmail;
 import com.example.musicrequestapp.domain.email.repository.UserEmailRepository;
 import com.example.musicrequestapp.domain.email.controller.dao.AuthCodeDao;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailRequest;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailVerifyResponse;
 import com.example.musicrequestapp.domain.email.exception.MailSendException;
+import com.example.musicrequestapp.domain.user.entity.User;
+import com.example.musicrequestapp.domain.user.repository.UserRepository;
+import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -27,6 +31,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailService {
     private final AuthCodeDao authCodeDao;
+    private final UserRepository userRepository;
     private final UserEmailRepository userEmailRepository;
     private final JavaMailSender mailSender;
 
@@ -67,9 +72,17 @@ public class EmailService {
     public void sendAuthCode(EmailRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.email();
 
+        emailIsExist(email);
+
         MimeMessage message = sendEmailForAuth(email);
 
         sendSimpleMessage(message);
+    }
+
+    private void emailIsExist(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw AlreadyEmailExistException.EXCEPTION;
+        }
     }
 
     private void sendSimpleMessage(MimeMessage message) {
