@@ -23,13 +23,10 @@ public class SignUp {
 
     @Transactional
     public void execute(SignUpRequest request) {
-        validateRequest(request);
+        validateRequest(request.name());
 
         String email = request.email();
-
-        if (userEmailRepository.findById(email).isEmpty()) {
-            throw NoPermissionException.EXCEPTION;
-        }
+        validateEmail(email);
 
         String encodedPassword = passwordEncoder.encode(request.password());
 
@@ -44,15 +41,19 @@ public class SignUp {
         deleteEmailFromRedis(email);
     }
 
-    private void validateRequest(SignUpRequest request) {
-        if (userRepository.findByEmail(request.email()).isPresent()) {
+    private void validateEmail(String email) {
+        if (userEmailRepository.findById(email).isEmpty()) {
+            throw NoPermissionException.EXCEPTION;
+        }
+        if (userRepository.findByEmail(email).isPresent()) {
             throw AlreadyEmailExistException.EXCEPTION;
         }
+    }
 
-        if (userRepository.findByName(request.name()).isPresent()) {
+    private void validateRequest(String name) {
+        if (userRepository.findByName(name).isPresent()) {
             throw AlreadyNameExistException.EXCEPTION;
         }
-
     }
 
     private void deleteEmailFromRedis(String email) {
