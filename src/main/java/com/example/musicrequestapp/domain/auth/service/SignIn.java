@@ -2,12 +2,9 @@ package com.example.musicrequestapp.domain.auth.service;
 
 import com.example.musicrequestapp.domain.auth.controller.dto.request.SignInRequest;
 import com.example.musicrequestapp.domain.auth.controller.dto.response.TokenResponse;
-import com.example.musicrequestapp.domain.auth.exception.AccessWithoutEmailAuthenticationException;
 import com.example.musicrequestapp.domain.auth.exception.PasswordNotMatchException;
-import com.example.musicrequestapp.domain.user.entity.Role;
 import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
-import com.example.musicrequestapp.global.error.exception.NoPermissionException;
 import com.example.musicrequestapp.global.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +21,6 @@ public class SignIn {
     @Transactional
     public TokenResponse execute(SignInRequest request) {
         User user = authenticateUser(request);
-        validateUserPermission(user);
 
         return generateToken(user);
     }
@@ -39,17 +35,6 @@ public class SignIn {
         return user;
     }
 
-    private void validateUserPermission(User user) {
-        if (user.getRole() == null) {
-            throw NoPermissionException.EXCEPTION;
-        }
-
-        if (user.getRole() == Role.ROLE_GUEST) {
-            throw AccessWithoutEmailAuthenticationException.EXCEPTION;
-        }
-
-    }
-
     private TokenResponse generateToken(User user) {
         String accessToken = jwtProvider.generateAccessToken(user.getEmail());
         String refreshToken = jwtProvider.generateRefreshToken(user.getEmail());
@@ -59,4 +44,5 @@ public class SignIn {
                 .refreshToken(refreshToken)
                 .build();
     }
+
 }
