@@ -55,4 +55,5 @@ public class EmailConfig {
         pt.put("mail.smtp.ssl.checkserveridentity", "true");
         return pt;
     }
+
 }
