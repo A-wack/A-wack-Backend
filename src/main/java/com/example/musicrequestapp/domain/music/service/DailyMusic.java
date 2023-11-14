@@ -20,7 +20,6 @@ public class DailyMusic {
 
     @Transactional(readOnly = true)
     public List<DailyMusicResponse> execute() {
-        userFacade.validateAdminUser();
 
         List<Music> list = musicRepository.findAll();
         long cnt = list.size();
