@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/request")
 @RequiredArgsConstructor
 public class PostController {
     private final UploadPost uploadPost;

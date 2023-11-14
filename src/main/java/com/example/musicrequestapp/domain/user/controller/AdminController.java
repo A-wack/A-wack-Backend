@@ -28,13 +28,12 @@ public class AdminController {
         return dailyMusicAdmin.execute();
     }
 
-    @GetMapping("/song-list")
+    @GetMapping("/request-list")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> setAllPostList() {
         return allPostList.execute();
     }
 
-    //어드민 권한
     @PostMapping("/select")
     @ResponseStatus(HttpStatus.CREATED)
     public void setSelectMusic(@RequestBody SelectRequest request) {

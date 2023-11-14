@@ -1,6 +1,6 @@
 package com.example.musicrequestapp.domain.email.controller;
 
-import com.example.musicrequestapp.domain.email.EmailService;
+import  com.example.musicrequestapp.domain.email.EmailService;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailRequest;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailVerifyResponse;
 import com.example.musicrequestapp.global.error.exception.TooManyRequestException;
