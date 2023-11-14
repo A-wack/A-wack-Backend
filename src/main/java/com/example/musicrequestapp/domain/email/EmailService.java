@@ -68,7 +68,7 @@ public class EmailService {
                 + "</div>";
     }
 
-    @Async("sendMail")
+    @Async
     public void sendAuthCode(EmailRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.email();
 
