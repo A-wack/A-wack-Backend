@@ -42,12 +42,12 @@ public class SignUp {
     }
 
     private void validateEmail(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
+        userRepository.findByEmail(email).ifPresent(e -> {
             throw AlreadyEmailExistException.EXCEPTION;
-        }
-        if (userEmailRepository.findById(email).isEmpty()) {
+        });
+        userEmailRepository.findById(email).ifPresent(e -> {
             throw NoPermissionException.EXCEPTION;
-        }
+        });
     }
 
     private void validateRequest(String name) {
