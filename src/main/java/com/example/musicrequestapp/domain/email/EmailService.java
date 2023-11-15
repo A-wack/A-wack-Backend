@@ -7,9 +7,7 @@ import com.example.musicrequestapp.domain.email.controller.dao.AuthCodeDao;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailRequest;
 import com.example.musicrequestapp.domain.email.controller.dto.EmailVerifyResponse;
 import com.example.musicrequestapp.domain.email.exception.MailSendException;
-import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.repository.UserRepository;
-import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -80,9 +78,9 @@ public class EmailService {
     }
 
     private void emailIsExist(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
+        userRepository.findByEmail(email).ifPresent(e -> {
             throw AlreadyEmailExistException.EXCEPTION;
-        }
+        });
     }
 
     private void sendSimpleMessage(MimeMessage message) {
