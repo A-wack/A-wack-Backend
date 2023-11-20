@@ -34,7 +34,7 @@ public class AdminController {
     @GetMapping("/request-list")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> setAllPostList(
-            @PageableDefault(size = 1, sort = "upload", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 15, sort = "upload", direction = Sort.Direction.DESC) Pageable pageable) {
         return allPostList.execute(pageable);
     }
 
