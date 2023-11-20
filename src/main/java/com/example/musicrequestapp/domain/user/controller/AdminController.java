@@ -8,8 +8,11 @@ import com.example.musicrequestapp.domain.music.service.SelectMusic;
 import com.example.musicrequestapp.domain.post.controller.dto.response.PostResponse;
 import com.example.musicrequestapp.domain.post.service.AllPostList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,8 +33,9 @@ public class AdminController {
 
     @GetMapping("/request-list")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> setAllPostList() {
-        return allPostList.execute();
+    public List<PostResponse> setAllPostList(
+            @PageableDefault(size = 1, sort = "upload", direction = Sort.Direction.DESC) Pageable pageable) {
+        return allPostList.execute(pageable);
     }
 
     @PostMapping("/select")

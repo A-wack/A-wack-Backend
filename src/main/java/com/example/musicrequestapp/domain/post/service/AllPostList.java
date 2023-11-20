@@ -10,6 +10,7 @@ import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
 import com.example.musicrequestapp.global.error.exception.NoPermissionException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +25,10 @@ public class AllPostList {
     private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
-    public List<PostResponse> execute() {
+    public List<PostResponse> execute(Pageable pageable) {
         userFacade.validateAdminUser();
 
-        List<Post> list = postRepository.findAll(Sort.by(Sort.Direction.DESC, "upload"))
+        List<Post> list = postRepository.findAll(pageable)
                 .stream()
                 .filter(post -> post.getIsSuccess().equals(SelectEnum.CHECKING.getNum())).toList();
 
