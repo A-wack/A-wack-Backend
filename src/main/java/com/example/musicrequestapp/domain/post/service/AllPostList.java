@@ -5,13 +5,9 @@ import com.example.musicrequestapp.domain.post.collection.PostCollection;
 import com.example.musicrequestapp.domain.post.controller.dto.response.PostResponse;
 import com.example.musicrequestapp.domain.post.entity.Post;
 import com.example.musicrequestapp.domain.post.repository.PostRepository;
-import com.example.musicrequestapp.domain.user.entity.Role;
-import com.example.musicrequestapp.domain.user.entity.User;
 import com.example.musicrequestapp.domain.user.service.facade.UserFacade;
-import com.example.musicrequestapp.global.error.exception.NoPermissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -24,7 +24,7 @@ public class EmailController {
     @ResponseStatus(HttpStatus.OK)
     public void sendMailForVerify(@Valid @RequestBody EmailRequest request) throws MessagingException, UnsupportedEncodingException {
         emailService.emailIsExist(request.email());
-        
+
         if (bucket.tryConsume(1)) {
             emailService.sendAuthCode(request);
         } else {
