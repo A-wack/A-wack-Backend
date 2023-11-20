@@ -70,14 +70,12 @@ public class EmailService {
     public void sendAuthCode(EmailRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.email();
 
-        emailIsExist(email);
-
         MimeMessage message = sendEmailForAuth(email);
 
         sendSimpleMessage(message);
     }
 
-    private void emailIsExist(String email) {
+    public void emailIsExist(String email) {
         userRepository.findByEmail(email).ifPresent(e -> {
             throw AlreadyEmailExistException.EXCEPTION;
         });
